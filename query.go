@@ -8,17 +8,17 @@ import (
 	"sync"
 	"time"
 
-	"github.com/libp2p/go-libp2p/core/network"
-	"github.com/libp2p/go-libp2p/core/peer"
-	pstore "github.com/libp2p/go-libp2p/core/peerstore"
-	"github.com/libp2p/go-libp2p/core/routing"
+	"github.com/AstaFrode/go-libp2p/core/network"
+	"github.com/AstaFrode/go-libp2p/core/peer"
+	pstore "github.com/AstaFrode/go-libp2p/core/peerstore"
+	"github.com/AstaFrode/go-libp2p/core/routing"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
 
+	"github.com/AstaFrode/go-libp2p-kad-dht/internal"
+	"github.com/AstaFrode/go-libp2p-kad-dht/qpeerset"
+	kb "github.com/AstaFrode/go-libp2p-kbucket"
 	"github.com/google/uuid"
-	"github.com/libp2p/go-libp2p-kad-dht/internal"
-	"github.com/libp2p/go-libp2p-kad-dht/qpeerset"
-	kb "github.com/libp2p/go-libp2p-kbucket"
 )
 
 // ErrNoPeersQueried is returned when we failed to connect to any peers.

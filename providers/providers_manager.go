@@ -7,6 +7,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/AstaFrode/go-libp2p-kad-dht/internal"
+	"github.com/AstaFrode/go-libp2p/core/peer"
+	"github.com/AstaFrode/go-libp2p/core/peerstore"
+	peerstoreImpl "github.com/AstaFrode/go-libp2p/p2p/host/peerstore"
 	lru "github.com/hashicorp/golang-lru/simplelru"
 	ds "github.com/ipfs/go-datastore"
 	"github.com/ipfs/go-datastore/autobatch"
@@ -14,10 +18,6 @@ import (
 	logging "github.com/ipfs/go-log"
 	"github.com/jbenet/goprocess"
 	goprocessctx "github.com/jbenet/goprocess/context"
-	"github.com/libp2p/go-libp2p-kad-dht/internal"
-	"github.com/libp2p/go-libp2p/core/peer"
-	"github.com/libp2p/go-libp2p/core/peerstore"
-	peerstoreImpl "github.com/libp2p/go-libp2p/p2p/host/peerstore"
 	"github.com/multiformats/go-base32"
 )
 

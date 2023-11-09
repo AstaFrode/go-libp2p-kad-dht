@@ -14,12 +14,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/libp2p/go-libp2p/core/event"
-	"github.com/libp2p/go-libp2p/core/network"
-	"github.com/libp2p/go-libp2p/core/peer"
-	"github.com/libp2p/go-libp2p/core/peerstore"
-	"github.com/libp2p/go-libp2p/core/protocol"
-	"github.com/libp2p/go-libp2p/core/routing"
+	"github.com/AstaFrode/go-libp2p/core/event"
+	"github.com/AstaFrode/go-libp2p/core/network"
+	"github.com/AstaFrode/go-libp2p/core/peer"
+	"github.com/AstaFrode/go-libp2p/core/peerstore"
+	"github.com/AstaFrode/go-libp2p/core/protocol"
+	"github.com/AstaFrode/go-libp2p/core/routing"
 	ma "github.com/multiformats/go-multiaddr"
 	"github.com/multiformats/go-multihash"
 	"github.com/multiformats/go-multistream"
@@ -27,16 +27,16 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	test "github.com/libp2p/go-libp2p-kad-dht/internal/testing"
-	pb "github.com/libp2p/go-libp2p-kad-dht/pb"
+	test "github.com/AstaFrode/go-libp2p-kad-dht/internal/testing"
+	pb "github.com/AstaFrode/go-libp2p-kad-dht/pb"
 
+	kb "github.com/AstaFrode/go-libp2p-kbucket"
+	bhost "github.com/AstaFrode/go-libp2p/p2p/host/basic"
+	swarmt "github.com/AstaFrode/go-libp2p/p2p/net/swarm/testing"
 	u "github.com/ipfs/boxo/util"
 	"github.com/ipfs/go-cid"
 	detectrace "github.com/ipfs/go-detect-race"
-	kb "github.com/libp2p/go-libp2p-kbucket"
 	record "github.com/libp2p/go-libp2p-record"
-	bhost "github.com/libp2p/go-libp2p/p2p/host/basic"
-	swarmt "github.com/libp2p/go-libp2p/p2p/net/swarm/testing"
 )
 
 var testCaseCids []cid.Cid
