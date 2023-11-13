@@ -27,8 +27,8 @@ import (
 	"github.com/AstaFrode/go-libp2p-kad-dht/rtrefresh"
 	kb "github.com/AstaFrode/go-libp2p-kbucket"
 	"github.com/AstaFrode/go-libp2p-kbucket/peerdiversity"
-	record "github.com/libp2p/go-libp2p-record"
-	recpb "github.com/libp2p/go-libp2p-record/pb"
+	record "github.com/AstaFrode/go-libp2p-record"
+	recpb "github.com/AstaFrode/go-libp2p-record/pb"
 
 	"github.com/gogo/protobuf/proto"
 	ds "github.com/ipfs/go-datastore"

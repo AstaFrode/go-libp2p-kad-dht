@@ -21,9 +21,8 @@ import (
 	"github.com/AstaFrode/go-libp2p-kad-dht/netsize"
 	"github.com/AstaFrode/go-libp2p-kad-dht/qpeerset"
 	kb "github.com/AstaFrode/go-libp2p-kbucket"
-	u "github.com/ipfs/boxo/util"
+	record "github.com/AstaFrode/go-libp2p-record"
 	"github.com/ipfs/go-cid"
-	record "github.com/libp2p/go-libp2p-record"
 	"github.com/multiformats/go-multihash"
 )
 
@@ -67,7 +66,7 @@ func (dht *IpfsDHT) PutValue(ctx context.Context, key string, value []byte, opts
 	}
 
 	rec := record.MakePutRecord(key, value)
-	rec.TimeReceived = u.FormatRFC3339(time.Now())
+	rec.TimeReceived = FormatRFC3339(time.Now())
 	err = dht.putLocal(ctx, key, rec)
 	if err != nil {
 		return err

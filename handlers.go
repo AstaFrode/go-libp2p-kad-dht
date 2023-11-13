@@ -12,10 +12,9 @@ import (
 
 	"github.com/AstaFrode/go-libp2p-kad-dht/internal"
 	pb "github.com/AstaFrode/go-libp2p-kad-dht/pb"
+	recpb "github.com/AstaFrode/go-libp2p-record/pb"
 	"github.com/gogo/protobuf/proto"
-	u "github.com/ipfs/boxo/util"
 	ds "github.com/ipfs/go-datastore"
-	recpb "github.com/libp2p/go-libp2p-record/pb"
 	"github.com/multiformats/go-base32"
 )
 
@@ -89,6 +88,16 @@ func (dht *IpfsDHT) handleGetValue(ctx context.Context, p peer.ID, pmes *pb.Mess
 	return resp, nil
 }
 
+// ParseRFC3339 parses an RFC3339Nano-formatted time stamp and
+// returns the UTC time.
+func ParseRFC3339(s string) (time.Time, error) {
+	t, err := time.Parse(time.RFC3339Nano, s)
+	if err != nil {
+		return time.Time{}, err
+	}
+	return t.UTC(), nil
+}
+
 func (dht *IpfsDHT) checkLocalDatastore(ctx context.Context, k []byte) (*recpb.Record, error) {
 	logger.Debugf("%s handleGetValue looking into ds", dht.self)
 	dskey := convertToDsKey(k)
@@ -115,7 +124,7 @@ func (dht *IpfsDHT) checkLocalDatastore(ctx context.Context, k []byte) (*recpb.R
 	}
 
 	var recordIsBad bool
-	recvtime, err := u.ParseRFC3339(rec.GetTimeReceived())
+	recvtime, err := ParseRFC3339(rec.GetTimeReceived())
 	if err != nil {
 		logger.Info("either no receive time set on record, or it was invalid: ", err)
 		recordIsBad = true
@@ -206,7 +215,7 @@ func (dht *IpfsDHT) handlePutValue(ctx context.Context, p peer.ID, pmes *pb.Mess
 	}
 
 	// record the time we receive every record
-	rec.TimeReceived = u.FormatRFC3339(time.Now())
+	rec.TimeReceived = FormatRFC3339(time.Now())
 
 	data, err := proto.Marshal(rec)
 	if err != nil {
@@ -215,6 +224,12 @@ func (dht *IpfsDHT) handlePutValue(ctx context.Context, p peer.ID, pmes *pb.Mess
 
 	err = dht.datastore.Put(ctx, dskey, data)
 	return pmes, err
+}
+
+// FormatRFC3339 returns the string representation of the
+// UTC value of the given time in RFC3339Nano format.
+func FormatRFC3339(t time.Time) string {
+	return t.UTC().Format(time.RFC3339Nano)
 }
 
 // returns nil, nil when either nothing is found or the value found doesn't properly validate.

@@ -11,7 +11,7 @@ import (
 	"github.com/AstaFrode/go-libp2p/core/protocol"
 
 	"github.com/AstaFrode/go-libp2p-kbucket/peerdiversity"
-	record "github.com/libp2p/go-libp2p-record"
+	record "github.com/AstaFrode/go-libp2p-record"
 
 	ds "github.com/ipfs/go-datastore"
 )

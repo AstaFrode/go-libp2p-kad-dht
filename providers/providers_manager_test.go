@@ -13,7 +13,6 @@ import (
 
 	mh "github.com/multiformats/go-multihash"
 
-	u "github.com/ipfs/boxo/util"
 	ds "github.com/ipfs/go-datastore"
 	dsq "github.com/ipfs/go-datastore/query"
 	dssync "github.com/ipfs/go-datastore/sync"
@@ -21,6 +20,18 @@ import (
 	// used by TestLargeProvidersSet: do not remove
 	// lds "github.com/ipfs/go-ds-leveldb"
 )
+
+// Hash is the global IPFS hash function. uses multihash SHA2_256, 256 bits
+func Hash(data []byte) mh.Multihash {
+	h, err := mh.Sum(data, mh.SHA2_256, -1)
+	if err != nil {
+		// this error can be safely ignored (panic) because multihash only fails
+		// from the selection of hash function. If the fn + length are valid, it
+		// won't error.
+		panic("multihash failed to hash using SHA2_256.")
+	}
+	return h
+}
 
 func TestProviderManager(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
@@ -35,7 +46,7 @@ func TestProviderManager(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	a := u.Hash([]byte("test"))
+	a := Hash([]byte("test"))
 	p.AddProvider(ctx, a, peer.AddrInfo{ID: peer.ID("testingprovider")})
 
 	// Not cached
@@ -86,7 +97,7 @@ func TestProvidersDatastore(t *testing.T) {
 	friend := peer.ID("friend")
 	var mhs []mh.Multihash
 	for i := 0; i < 100; i++ {
-		h := u.Hash([]byte(fmt.Sprint(i)))
+		h := Hash([]byte(fmt.Sprint(i)))
 		mhs = append(mhs, h)
 		p.AddProvider(ctx, h, peer.AddrInfo{ID: friend})
 	}
@@ -105,7 +116,7 @@ func TestProvidersDatastore(t *testing.T) {
 func TestProvidersSerialization(t *testing.T) {
 	dstore := dssync.MutexWrap(ds.NewMapDatastore())
 
-	k := u.Hash(([]byte("my key!")))
+	k := Hash(([]byte("my key!")))
 	p1 := peer.ID("peer one")
 	p2 := peer.ID("peer two")
 	pt1 := time.Now()
@@ -174,7 +185,7 @@ func TestProvidesExpire(t *testing.T) {
 	peers := []peer.ID{"a", "b"}
 	var mhs []mh.Multihash
 	for i := 0; i < 10; i++ {
-		h := u.Hash([]byte(fmt.Sprint(i)))
+		h := Hash([]byte(fmt.Sprint(i)))
 		mhs = append(mhs, h)
 	}
 
@@ -286,7 +297,7 @@ func TestLargeProvidersSet(t *testing.T) {
 
 	var mhs []mh.Multihash
 	for i := 0; i < 1000; i++ {
-		h := u.Hash([]byte(fmt.Sprint(i)))
+		h := Hash([]byte(fmt.Sprint(i)))
 		mhs = append(mhs, h)
 		for _, pid := range peers {
 			p.AddProvider(ctx, h, peer.AddrInfo{ID: pid})
@@ -311,8 +322,8 @@ func TestUponCacheMissProvidersAreReadFromDatastore(t *testing.T) {
 	defer cancel()
 
 	p1, p2 := peer.ID("a"), peer.ID("b")
-	h1 := u.Hash([]byte("1"))
-	h2 := u.Hash([]byte("2"))
+	h1 := Hash([]byte("1"))
+	h2 := Hash([]byte("2"))
 	ps, err := pstoremem.NewPeerstore()
 	if err != nil {
 		t.Fatal(err)
@@ -341,7 +352,7 @@ func TestWriteUpdatesCache(t *testing.T) {
 	defer cancel()
 
 	p1, p2 := peer.ID("a"), peer.ID("b")
-	h1 := u.Hash([]byte("1"))
+	h1 := Hash([]byte("1"))
 	ps, err := pstoremem.NewPeerstore()
 	if err != nil {
 		t.Fatal(err)

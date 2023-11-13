@@ -7,23 +7,35 @@ import (
 
 	dht "github.com/AstaFrode/go-libp2p-kad-dht"
 	test "github.com/AstaFrode/go-libp2p-kad-dht/internal/testing"
+	record "github.com/AstaFrode/go-libp2p-record"
 	"github.com/AstaFrode/go-libp2p/core/host"
 	"github.com/AstaFrode/go-libp2p/core/peer"
 	peerstore "github.com/AstaFrode/go-libp2p/core/peerstore"
 	bhost "github.com/AstaFrode/go-libp2p/p2p/host/basic"
 	swarmt "github.com/AstaFrode/go-libp2p/p2p/net/swarm/testing"
-	u "github.com/ipfs/boxo/util"
 	"github.com/ipfs/go-cid"
-	record "github.com/libp2p/go-libp2p-record"
 	"github.com/multiformats/go-multiaddr"
+	mh "github.com/multiformats/go-multihash"
 	"github.com/stretchr/testify/require"
 )
 
 var wancid, lancid cid.Cid
 
+// Hash is the global IPFS hash function. uses multihash SHA2_256, 256 bits
+func Hash(data []byte) mh.Multihash {
+	h, err := mh.Sum(data, mh.SHA2_256, -1)
+	if err != nil {
+		// this error can be safely ignored (panic) because multihash only fails
+		// from the selection of hash function. If the fn + length are valid, it
+		// won't error.
+		panic("multihash failed to hash using SHA2_256.")
+	}
+	return h
+}
+
 func init() {
-	wancid = cid.NewCidV1(cid.DagCBOR, u.Hash([]byte("wan cid -- value")))
-	lancid = cid.NewCidV1(cid.DagCBOR, u.Hash([]byte("lan cid -- value")))
+	wancid = cid.NewCidV1(cid.DagCBOR, Hash([]byte("wan cid -- value")))
+	lancid = cid.NewCidV1(cid.DagCBOR, Hash([]byte("lan cid -- value")))
 }
 
 type blankValidator struct{}

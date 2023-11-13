@@ -23,7 +23,6 @@ import (
 	swarm "github.com/AstaFrode/go-libp2p/p2p/net/swarm"
 
 	"github.com/gogo/protobuf/proto"
-	u "github.com/ipfs/boxo/util"
 	"github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
 	dssync "github.com/ipfs/go-datastore/sync"
@@ -38,8 +37,8 @@ import (
 	"github.com/AstaFrode/go-libp2p-kad-dht/providers"
 	kb "github.com/AstaFrode/go-libp2p-kbucket"
 
-	record "github.com/libp2p/go-libp2p-record"
-	recpb "github.com/libp2p/go-libp2p-record/pb"
+	record "github.com/AstaFrode/go-libp2p-record"
+	recpb "github.com/AstaFrode/go-libp2p-record/pb"
 
 	"github.com/AstaFrode/go-libp2p-xor/kademlia"
 	kadkey "github.com/AstaFrode/go-libp2p-xor/key"
@@ -453,6 +452,12 @@ func (dht *FullRT) GetClosestPeers(ctx context.Context, key string) ([]peer.ID, 
 	return peers, nil
 }
 
+// FormatRFC3339 returns the string representation of the
+// UTC value of the given time in RFC3339Nano format.
+func FormatRFC3339(t time.Time) string {
+	return t.UTC().Format(time.RFC3339Nano)
+}
+
 // PutValue adds value corresponding to given Key.
 // This is the top level "Store" operation of the DHT
 func (dht *FullRT) PutValue(ctx context.Context, key string, value []byte, opts ...routing.Option) (err error) {
@@ -486,7 +491,7 @@ func (dht *FullRT) PutValue(ctx context.Context, key string, value []byte, opts 
 	}
 
 	rec := record.MakePutRecord(key, value)
-	rec.TimeReceived = u.FormatRFC3339(time.Now())
+	rec.TimeReceived = FormatRFC3339(time.Now())
 	err = dht.putLocal(ctx, key, rec)
 	if err != nil {
 		return err

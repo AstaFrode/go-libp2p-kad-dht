@@ -6,10 +6,10 @@ import (
 	"errors"
 	"fmt"
 
+	recpb "github.com/AstaFrode/go-libp2p-record/pb"
 	"github.com/AstaFrode/go-libp2p/core/host"
 	"github.com/AstaFrode/go-libp2p/core/peer"
 	logging "github.com/ipfs/go-log"
-	recpb "github.com/libp2p/go-libp2p-record/pb"
 	"github.com/multiformats/go-multihash"
 
 	"github.com/AstaFrode/go-libp2p-kad-dht/internal"

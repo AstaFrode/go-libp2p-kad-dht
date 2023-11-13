@@ -6,13 +6,12 @@ import (
 
 	"github.com/AstaFrode/go-libp2p-kad-dht/providers"
 	"github.com/AstaFrode/go-libp2p-kbucket/peerdiversity"
+	record "github.com/AstaFrode/go-libp2p-record"
 	"github.com/AstaFrode/go-libp2p/core/host"
 	"github.com/AstaFrode/go-libp2p/core/peer"
 	"github.com/AstaFrode/go-libp2p/core/protocol"
-	"github.com/ipfs/boxo/ipns"
 	ds "github.com/ipfs/go-datastore"
 	dssync "github.com/ipfs/go-datastore/sync"
-	record "github.com/libp2p/go-libp2p-record"
 )
 
 // DefaultPrefix is the application specific prefix attached to all DHT protocols by default.
@@ -158,10 +157,10 @@ func (c *Config) Validate() error {
 		return fmt.Errorf("protocol prefix %s must use the record.PublicKeyValidator for the /pk namespace", DefaultPrefix)
 	}
 
-	if ipnsVal, ipnsValFound := nsval["ipns"]; !ipnsValFound {
-		return fmt.Errorf("protocol prefix %s must support the /ipns namespaced Validator", DefaultPrefix)
-	} else if _, ok := ipnsVal.(ipns.Validator); !ok {
-		return fmt.Errorf("protocol prefix %s must use ipns.Validator for the /ipns namespace", DefaultPrefix)
-	}
+	// if ipnsVal, ipnsValFound := nsval["ipns"]; !ipnsValFound {
+	// 	return fmt.Errorf("protocol prefix %s must support the /ipns namespaced Validator", DefaultPrefix)
+	// } else if _, ok := ipnsVal.(ipns.Validator); !ok {
+	// 	return fmt.Errorf("protocol prefix %s must use ipns.Validator for the /ipns namespace", DefaultPrefix)
+	// }
 	return nil
 }

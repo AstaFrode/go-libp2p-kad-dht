@@ -8,7 +8,7 @@
 syntax = "proto3";
 package dht.pb;
 
-import "github.com/libp2p/go-libp2p-record/pb/record.proto";
+import "github.com/AstaFrode/go-libp2p-record/pb/record.proto";
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 
 message Message {
