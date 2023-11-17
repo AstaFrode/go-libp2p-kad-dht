@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/AstaFrode/boxo/ipns"
 	"github.com/AstaFrode/go-libp2p-kad-dht/providers"
 	"github.com/AstaFrode/go-libp2p-kbucket/peerdiversity"
 	record "github.com/AstaFrode/go-libp2p-record"
@@ -88,9 +89,9 @@ func (c *Config) ApplyFallbacks(h host.Host) error {
 			if _, pkFound := nsval["pk"]; !pkFound {
 				nsval["pk"] = record.PublicKeyValidator{}
 			}
-			// if _, ipnsFound := nsval["ipns"]; !ipnsFound {
-			// 	nsval["ipns"] = ipns.Validator{KeyBook: h.Peerstore()}
-			// }
+			if _, ipnsFound := nsval["ipns"]; !ipnsFound {
+				nsval["ipns"] = ipns.Validator{KeyBook: h.Peerstore()}
+			}
 		} else {
 			return fmt.Errorf("the default Validator was changed without being marked as changed")
 		}
@@ -157,10 +158,10 @@ func (c *Config) Validate() error {
 		return fmt.Errorf("protocol prefix %s must use the record.PublicKeyValidator for the /pk namespace", DefaultPrefix)
 	}
 
-	// if ipnsVal, ipnsValFound := nsval["ipns"]; !ipnsValFound {
-	// 	return fmt.Errorf("protocol prefix %s must support the /ipns namespaced Validator", DefaultPrefix)
-	// } else if _, ok := ipnsVal.(ipns.Validator); !ok {
-	// 	return fmt.Errorf("protocol prefix %s must use ipns.Validator for the /ipns namespace", DefaultPrefix)
-	// }
+	if ipnsVal, ipnsValFound := nsval["ipns"]; !ipnsValFound {
+		return fmt.Errorf("protocol prefix %s must support the /ipns namespaced Validator", DefaultPrefix)
+	} else if _, ok := ipnsVal.(ipns.Validator); !ok {
+		return fmt.Errorf("protocol prefix %s must use ipns.Validator for the /ipns namespace", DefaultPrefix)
+	}
 	return nil
 }
